@@ -1,0 +1,223 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "ui_kits/_shared/**",
+              "ui_kits/admin/**",
+              "ui_kits/client/**",
+              "ui_kits/staff/**",
+              "uploads/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Syne|DM Sans))/i]",
+        "message": "Font not provided by the design system. Available: Syne, DM Sans."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--accent",
+      "--accent-hover",
+      "--amber-100",
+      "--amber-400",
+      "--amber-50",
+      "--amber-500",
+      "--bg-app",
+      "--bg-card",
+      "--bg-input",
+      "--bg-row-alt",
+      "--bg-sidebar",
+      "--blue-100",
+      "--blue-500",
+      "--border-card",
+      "--border-input",
+      "--emerald-100",
+      "--emerald-500",
+      "--fg-on-amber",
+      "--fg-on-dark",
+      "--fg1",
+      "--fg2",
+      "--fg3",
+      "--font-body",
+      "--font-display",
+      "--gray-100",
+      "--gray-200",
+      "--gray-400",
+      "--gray-50",
+      "--gray-500",
+      "--gray-700",
+      "--gray-900",
+      "--gray-950",
+      "--icon-inline",
+      "--icon-lg",
+      "--icon-nav",
+      "--lh-normal",
+      "--lh-snug",
+      "--lh-tight",
+      "--radius-lg",
+      "--radius-md",
+      "--radius-pill",
+      "--radius-sm",
+      "--radius-xl",
+      "--red-100",
+      "--red-500",
+      "--shadow-amber",
+      "--shadow-card",
+      "--shadow-modal",
+      "--shadow-pop",
+      "--size-body",
+      "--size-display-xl",
+      "--size-h1",
+      "--size-h2",
+      "--size-h3",
+      "--size-sm",
+      "--size-stat",
+      "--size-xs",
+      "--space-1",
+      "--space-10",
+      "--space-12",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--space-8",
+      "--tracking-normal",
+      "--tracking-tight",
+      "--tracking-wide",
+      "--violet-100",
+      "--violet-500",
+      "--weight-body-bold",
+      "--weight-body-medium",
+      "--weight-body-regular",
+      "--weight-body-semibold",
+      "--weight-display-black",
+      "--weight-display-bold",
+      "--white"
+    ],
+    "tokenKinds": {
+      "--amber-400": "color",
+      "--amber-500": "color",
+      "--amber-100": "color",
+      "--amber-50": "color",
+      "--gray-950": "color",
+      "--gray-900": "color",
+      "--gray-700": "color",
+      "--gray-500": "color",
+      "--gray-400": "color",
+      "--gray-200": "color",
+      "--gray-100": "color",
+      "--gray-50": "color",
+      "--white": "color",
+      "--violet-500": "color",
+      "--violet-100": "color",
+      "--blue-500": "color",
+      "--blue-100": "color",
+      "--emerald-500": "color",
+      "--emerald-100": "color",
+      "--red-500": "color",
+      "--red-100": "color",
+      "--bg-app": "color",
+      "--bg-card": "color",
+      "--bg-input": "color",
+      "--bg-row-alt": "color",
+      "--bg-sidebar": "color",
+      "--fg1": "color",
+      "--fg2": "color",
+      "--fg3": "color",
+      "--fg-on-dark": "color",
+      "--fg-on-amber": "color",
+      "--accent": "color",
+      "--accent-hover": "color",
+      "--border-card": "color",
+      "--border-input": "color",
+      "--font-display": "font",
+      "--font-body": "font",
+      "--weight-display-black": "font",
+      "--weight-display-bold": "font",
+      "--weight-body-regular": "font",
+      "--weight-body-medium": "font",
+      "--weight-body-semibold": "font",
+      "--weight-body-bold": "font",
+      "--size-display-xl": "spacing",
+      "--size-h1": "spacing",
+      "--size-h2": "spacing",
+      "--size-h3": "spacing",
+      "--size-stat": "spacing",
+      "--size-body": "spacing",
+      "--size-sm": "spacing",
+      "--size-xs": "spacing",
+      "--lh-tight": "font",
+      "--lh-snug": "font",
+      "--lh-normal": "font",
+      "--tracking-tight": "font",
+      "--tracking-normal": "font",
+      "--tracking-wide": "font",
+      "--space-1": "spacing",
+      "--space-2": "spacing",
+      "--space-3": "spacing",
+      "--space-4": "spacing",
+      "--space-5": "spacing",
+      "--space-6": "spacing",
+      "--space-8": "spacing",
+      "--space-10": "spacing",
+      "--space-12": "spacing",
+      "--radius-sm": "radius",
+      "--radius-md": "radius",
+      "--radius-lg": "radius",
+      "--radius-xl": "radius",
+      "--radius-pill": "radius",
+      "--shadow-card": "shadow",
+      "--shadow-pop": "shadow",
+      "--shadow-modal": "shadow",
+      "--shadow-amber": "shadow",
+      "--icon-nav": "spacing",
+      "--icon-inline": "spacing",
+      "--icon-lg": "spacing"
+    },
+    "fontFamilies": [
+      "DM Sans",
+      "Syne"
+    ]
+  }
+}

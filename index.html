@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MonnyCreax Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "DM Sans", system-ui, sans-serif;
+    background: #F9FAFB; color: #111827;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 64px 32px 96px; }
+  .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 36px; }
+  .brand-mark { width: 44px; height: 44px; background: #F59E0B; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+  .brand-name { font-family: "Syne", sans-serif; font-weight: 900; font-size: 26px; letter-spacing: -0.025em; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #D97706; margin-bottom: 12px; }
+  h1 { font-family: "Syne", sans-serif; font-weight: 900; font-size: 56px; line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 16px; }
+  h1 em { font-style: italic; font-weight: 400; color: #6B7280; }
+  .lede { font-size: 17px; line-height: 1.55; color: #4B5563; max-width: 620px; text-wrap: pretty; }
+  .lede strong { color: #111827; font-weight: 700; }
+  h2 { font-family: "Syne", sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 56px 0 16px; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card { background: #fff; border: 1px solid #F3F4F6; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 20px; text-decoration: none; color: inherit; transition: all 200ms; display: flex; gap: 14px; align-items: flex-start; }
+  .card:hover { border-color: #F59E0B; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .card-mark { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--tint); color: var(--ink); }
+  .card-title { font-family: "Syne", sans-serif; font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+  .card-desc { font-size: 13px; color: #6B7280; line-height: 1.45; }
+  .card[data-tone="amber"]  { --tint: #FFFBEB; --ink: #D97706; }
+  .card[data-tone="purple"] { --tint: #F5F3FF; --ink: #7C3AED; }
+  .card[data-tone="blue"]   { --tint: #EFF6FF; --ink: #2563EB; }
+  .card[data-tone="dark"]   { --tint: #F3F4F6; --ink: #111827; }
+  .card[data-tone="green"]  { --tint: #ECFDF5; --ink: #059669; }
+
+  .files { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .file { background: #fff; border: 1px solid #F3F4F6; border-radius: 10px; padding: 10px 12px; font-size: 12px; font-family: "DM Sans"; color: #374151; display: flex; align-items: center; gap: 8px; }
+  .file svg { color: #9CA3AF; flex-shrink: 0; }
+  .quote { font-family: "Syne", sans-serif; font-style: italic; font-size: 18px; color: #6B7280; margin-top: 56px; padding-top: 32px; border-top: 1px solid #F3F4F6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-mark"><svg width="22" height="22" viewBox="0 0 32 32"><polygon points="16,5 19,13 27.5,13 20.5,18 23.5,26 16,21 8.5,26 11.5,18 4.5,13 13,13" fill="#030712"/></svg></div>
+    <span class="brand-name">MonnyCreax</span>
+  </div>
+
+  <div class="eyebrow">Design System · v1.0</div>
+  <h1>Strategy before design. <em>Clarity in delivery.</em></h1>
+  <p class="lede">A boutique brand-strategy consultancy's <strong>client portal</strong>, brought into one place. This system covers tokens, components, and three role-tailored UI kits — Client, Admin, and Staff — sharing one component library and one amber accent.</p>
+
+  <h2>UI Kits</h2>
+  <div class="grid">
+    <a class="card" data-tone="amber" href="ui_kits/client/index.html">
+      <span class="card-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+      <div>
+        <div class="card-title">Client Portal →</div>
+        <div class="card-desc">Sarah Mitchell. Six-item nav, amber bubbles, milestone tracking, Pay Now invoices.</div>
+      </div>
+    </a>
+    <a class="card" data-tone="purple" href="ui_kits/admin/index.html">
+      <span class="card-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <div>
+        <div class="card-title">Admin Suite →</div>
+        <div class="card-desc">Amara Osei. Eight-item nav, CRM kanban, revenue + package mix charts, full ops.</div>
+      </div>
+    </a>
+    <a class="card" data-tone="blue" href="ui_kits/staff/index.html">
+      <span class="card-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <div>
+        <div class="card-title">Staff Workspace →</div>
+        <div class="card-desc">Kwame Addo. Five-item nav, blue bubbles, tickable task list, project chat.</div>
+      </div>
+    </a>
+    <a class="card" data-tone="dark" href="login.html">
+      <span class="card-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></span>
+      <div>
+        <div class="card-title">Login Screen →</div>
+        <div class="card-desc">Dark canvas with amber + violet glow. Demo mode picks a role; live mode signs in.</div>
+      </div>
+    </a>
+  </div>
+
+  <h2>Foundations</h2>
+  <div class="files">
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>README.md</div>
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>colors_and_type.css</div>
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>SKILL.md</div>
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>assets/</div>
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>preview/</div>
+    <div class="file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>ui_kits/</div>
+  </div>
+
+  <p class="quote">"Strategy before design. Clarity in delivery."</p>
+</div>
+</body>
+</html>

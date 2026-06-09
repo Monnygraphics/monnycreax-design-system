@@ -1,0 +1,5 @@
+/* MonnyCreax Design System — canonical entry point.
+   Consumers link this single file to get tokens + shared component styles. */
+
+@import url('./colors_and_type.css');
+@import url('./ui_kits/_shared/kit.css');

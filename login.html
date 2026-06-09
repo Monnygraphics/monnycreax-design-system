@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Login Screen" subtitle="Pure HTML — demo + live mode" viewport="1280x820" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MonnyCreax · Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: "DM Sans", system-ui, sans-serif;
+    background: #030712;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px;
+  }
+  .stage::before, .stage::after {
+    content: "";
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .stage::before {
+    width: 520px; height: 520px;
+    background: radial-gradient(closest-side, rgba(245, 158, 11, 0.45), transparent 70%);
+    top: -120px; left: -100px;
+  }
+  .stage::after {
+    width: 520px; height: 520px;
+    background: radial-gradient(closest-side, rgba(139, 92, 246, 0.4), transparent 70%);
+    bottom: -160px; right: -120px;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    color: #111827;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .brand-mark {
+    width: 40px; height: 40px;
+    background: #F59E0B;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-name {
+    font-family: "Syne", sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  h1 {
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+  }
+  .sub {
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 24px;
+  }
+  .mode-toggle {
+    display: flex;
+    background: #F3F4F6;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 22px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .mode-toggle button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #6B7280;
+    font-family: inherit;
+    font-weight: 600;
+    transition: all 200ms;
+  }
+  .mode-toggle button.active {
+    background: #fff;
+    color: #111827;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .roles {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .role {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid #F3F4F6;
+    background: #fff;
+    cursor: pointer;
+    transition: all 200ms;
+    text-align: left;
+    font-family: inherit;
+    width: 100%;
+  }
+  .role:hover { border-color: var(--accent); background: var(--tint); }
+  .role-mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--tint);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .role-mark svg { width: 18px; height: 18px; }
+  .role-name { font-weight: 700; font-size: 14px; color: #111827; }
+  .role-desc { font-size: 12px; color: #6B7280; margin-top: 2px; }
+  .role-arrow { color: #9CA3AF; }
+  .role[data-role="client"] { --accent: #D97706; --tint: #FFFBEB; }
+  .role[data-role="admin"]  { --accent: #7C3AED; --tint: #F5F3FF; }
+  .role[data-role="staff"]  { --accent: #2563EB; --tint: #EFF6FF; }
+
+  .form { display: none; flex-direction: column; gap: 14px; }
+  .form.active { display: flex; }
+  label {
+    font-size: 12px; font-weight: 600; color: #374151;
+    display: block; margin-bottom: 6px;
+  }
+  input {
+    width: 100%; background: #F3F4F6; border: 1.5px solid transparent;
+    border-radius: 12px; padding: 12px 14px; font-size: 13px; font-family: inherit;
+    outline: none;
+    transition: all 200ms;
+  }
+  input:focus { background: #fff; border-color: #F59E0B; box-shadow: 0 0 0 4px rgba(245,158,11,0.15); }
+  .row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+  .row a { color: #D97706; text-decoration: none; font-weight: 600; }
+  .btn-primary {
+    background: #F59E0B; color: #030712; border: none;
+    padding: 13px; border-radius: 12px; font-weight: 700; font-family: inherit;
+    font-size: 14px; cursor: pointer; transition: all 200ms;
+  }
+  .btn-primary:hover { background: #D97706; }
+  .btn-ghost {
+    background: transparent; color: #6B7280; border: 1px solid #E5E7EB;
+    padding: 12px; border-radius: 12px; font-weight: 600; font-family: inherit;
+    font-size: 13px; cursor: pointer;
+  }
+  .footer-note {
+    text-align: center;
+    font-family: "Syne", sans-serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 22px;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="card">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="20" height="20" viewBox="0 0 32 32"><polygon points="16,5 19,13 27.5,13 20.5,18 23.5,26 16,21 8.5,26 11.5,18 4.5,13 13,13" fill="#030712"></polygon></svg>
+      </div>
+      <span class="brand-name">MonnyCreax</span>
+    </div>
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to your client portal — strategy, files, and conversations in one place.</p>
+
+    <div class="mode-toggle" id="mode">
+      <button class="active" data-mode="demo">Demo Mode</button>
+      <button data-mode="live">Live Mode</button>
+    </div>
+
+    <div class="form active" data-form="demo">
+      <button class="role" data-role="client" onclick="window.location.href='ui_kits/client/index.html'">
+        <span class="role-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </span>
+        <div style="flex:1">
+          <div class="role-name">Continue as Client</div>
+          <div class="role-desc">Sarah Mitchell · TechVision Co</div>
+        </div>
+        <svg class="role-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+      <button class="role" data-role="admin" onclick="window.location.href='ui_kits/admin/index.html'">
+        <span class="role-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </span>
+        <div style="flex:1">
+          <div class="role-name">Continue as Admin</div>
+          <div class="role-desc">Amara Osei · Founder</div>
+        </div>
+        <svg class="role-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+      <button class="role" data-role="staff" onclick="window.location.href='ui_kits/staff/index.html'">
+        <span class="role-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
+        <div style="flex:1">
+          <div class="role-name">Continue as Staff</div>
+          <div class="role-desc">Kwame Addo · Brand Designer</div>
+        </div>
+        <svg class="role-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="form" data-form="live">
+      <div>
+        <label>Email address</label>
+        <input type="email" placeholder="you@company.com" />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" placeholder="••••••••" />
+      </div>
+      <div class="row">
+        <span></span>
+        <a href="#">Forgot password?</a>
+      </div>
+      <button class="btn-primary">Sign in</button>
+      <button class="btn-ghost">Request access</button>
+    </div>
+
+    <div class="footer-note">Strategy before design. Clarity in delivery.</div>
+  </div>
+</div>
+<script>
+  document.querySelectorAll("#mode button").forEach(function(b) {
+    b.addEventListener("click", function() {
+      var mode = b.dataset.mode;
+      document.querySelectorAll("#mode button").forEach(function(x) { x.classList.toggle("active", x === b); });
+      document.querySelectorAll("[data-form]").forEach(function(f) { f.classList.toggle("active", f.dataset.form === mode); });
+    });
+  });
+</script>
+</body>
+</html>
