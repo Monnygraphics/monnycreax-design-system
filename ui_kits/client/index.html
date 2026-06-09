@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Client" name="Client Portal — UI Kit" subtitle="Sarah's view — projects, messages, invoices" viewport="1280x820" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MonnyCreax · Client Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, #root { height: 100%; margin: 0; }
+  body { font-family: "DM Sans", system-ui, sans-serif; color: #111827; background: #F9FAFB; -webkit-font-smoothing: antialiased; }
+  button, input, textarea { font-family: inherit; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>// Mock data — pulled directly from src/App.jsx
+const MOCK_PROJECTS = [
+  {
+    id: "p1", clientName: "TechVision Co",
+    title: "Complete Clarity Package", package: "Complete Clarity", value: 750,
+    status: "active", progress: 65, startDate: "2026-03-15", dueDate: "2026-05-10",
+    milestones: [
+      { id: "m1", title: "Discovery & Brief",   status: "completed",   date: "2026-03-22" },
+      { id: "m2", title: "Brand Strategy",      status: "completed",   date: "2026-04-05" },
+      { id: "m3", title: "Visual Identity",     status: "in-progress", date: "2026-04-25" },
+      { id: "m4", title: "Brand Guidelines",    status: "pending",     date: "2026-05-02" },
+      { id: "m5", title: "Final Delivery",      status: "pending",     date: "2026-05-10" },
+    ],
+    files: [
+      { id: "f1", name: "Discovery_Brief_v1.pdf",         size: "2.4 MB", uploadedBy: "TechVision Co", date: "2026-03-18", type: "brief" },
+      { id: "f2", name: "Brand_Strategy_Document.pdf",    size: "5.1 MB", uploadedBy: "MonnyCreax",    date: "2026-04-05", type: "deliverable" },
+      { id: "f3", name: "Visual_Identity_Concept_v1.pdf", size: "12.8 MB",uploadedBy: "MonnyCreax",    date: "2026-04-20", type: "deliverable" },
+    ],
+    updates: [
+      { id: "u1", text: "Visual Identity Concept v1 uploaded for review", date: "2026-04-20" },
+      { id: "u2", text: "Brand Strategy milestone completed",              date: "2026-04-05" },
+      { id: "u3", text: "Discovery session completed successfully",        date: "2026-03-22" },
+    ],
+    messages: [
+      { id: "msg1", sender: "Amara Osei",     role: "admin",  text: "The Visual Identity concepts are ready for your review. Please share feedback by Friday.", time: "10:32 AM" },
+      { id: "msg2", sender: "Sarah Mitchell", role: "client", text: "Looks great! I have questions about the colour palette. Can we schedule a call?",          time: "2:15 PM"  },
+      { id: "msg3", sender: "Amara Osei",     role: "admin",  text: "Absolutely! I'll send a calendar invite for Thursday at 3 PM.",                            time: "3:01 PM"  },
+    ],
+  },
+  {
+    id: "p2", clientName: "Apex Speakers",
+    title: "Rapid Clarity Package", package: "Rapid Clarity", value: 500,
+    status: "active", progress: 30, startDate: "2026-04-10", dueDate: "2026-05-15",
+    milestones: [
+      { id: "m1", title: "Discovery & Brief",   status: "completed",   date: "2026-04-15" },
+      { id: "m2", title: "Messaging Framework", status: "in-progress", date: "2026-04-28" },
+      { id: "m3", title: "Final Delivery",      status: "pending",     date: "2026-05-15" },
+    ],
+    files: [], updates: [], messages: [],
+  },
+];
+
+const MOCK_CLIENTS = [
+  { id: "c1", name: "Sarah Mitchell", company: "TechVision Co",      email: "sarah@techvision.co",          location: "Lagos, Nigeria",     package: "Complete Clarity", status: "active",    ltv: 750,  avatar: "SM", scheme: "amber" },
+  { id: "c2", name: "David Okafor",   company: "Apex Speakers",      email: "david@apexspeakers.com",       location: "Accra, Ghana",       package: "Rapid Clarity",    status: "active",    ltv: 500,  avatar: "DO", scheme: "blue" },
+  { id: "c3", name: "Zanele Nkosi",   company: "Nkosi Leadership",   email: "zanele@nkosileadership.co.za", location: "Johannesburg, SA",   package: "Premium Clarity",  status: "completed", ltv: 1200, avatar: "ZN", scheme: "green" },
+  { id: "c4", name: "Marcus Tetteh",  company: "Tetteh Ventures",    email: "marcus@tettehventures.com",    location: "London, UK",         package: "Complete Clarity", status: "at-risk",   ltv: 750,  avatar: "MT", scheme: "red" },
+];
+
+const MOCK_INVOICES = [
+  { id: "inv1", clientId: "c1", clientName: "TechVision Co",    project: "Complete Clarity Package",  amount: 750,  status: "paid",    issued: "2026-03-15", due: "2026-03-29", paid: "2026-03-22" },
+  { id: "inv2", clientId: "c2", clientName: "Apex Speakers",    project: "Rapid Clarity Package",     amount: 500,  status: "pending", issued: "2026-04-10", due: "2026-04-24", paid: null },
+  { id: "inv3", clientId: "c3", clientName: "Nkosi Leadership", project: "Premium Clarity + Support", amount: 1200, status: "paid",    issued: "2026-01-10", due: "2026-01-24", paid: "2026-01-20" },
+  { id: "inv4", clientId: "c4", clientName: "Tetteh Ventures",  project: "Complete Clarity Package",  amount: 750,  status: "overdue", issued: "2026-02-20", due: "2026-03-06", paid: null },
+];
+
+const MOCK_CRM = [
+  { id: "d1", company: "FutureEdge Inc",  contact: "Priya Sharma",     value: 1200, stage: "Lead",            probability: 20, close: "2026-06-01", owner: "Amara Osei" },
+  { id: "d2", company: "Beacon Advisory", contact: "Jomo Mwangi",      value: 750,  stage: "Qualified",       probability: 40, close: "2026-05-20", owner: "Kwame Addo" },
+  { id: "d3", company: "Orbit Creatives", contact: "Fatima Al-Rashid", value: 500,  stage: "Proposal Sent",   probability: 60, close: "2026-05-10", owner: "Amara Osei" },
+  { id: "d4", company: "Summit Leaders",  contact: "Bernard Asante",   value: 1200, stage: "Contract Signed", probability: 90, close: "2026-05-05", owner: "Amara Osei" },
+  { id: "d5", company: "Nexus Media",     contact: "Chioma Obi",       value: 750,  stage: "Qualified",       probability: 35, close: "2026-06-15", owner: "Kwame Addo" },
+];
+
+const MOCK_TICKETS = [
+  { id: "t1", clientId: "c1", subject: "Question about colour palette revisions", status: "open",     priority: "medium", created: "2026-04-22" },
+  { id: "t2", clientId: "c2", subject: "File download issue on mobile",           status: "resolved", priority: "high",   created: "2026-04-18" },
+  { id: "t3", clientId: "c4", subject: "Invoice discrepancy",                     status: "open",     priority: "high",   created: "2026-04-15" },
+];
+
+const MOCK_TEAM = [
+  { id: "a1", name: "Amara Osei",  email: "amara@monnycreax.com", role: "admin", title: "Founder & Brand Strategist", avatar: "AO", projects: 3 },
+  { id: "s1", name: "Kwame Addo",  email: "kwame@monnycreax.com", role: "staff", title: "Brand Designer",             avatar: "KA", projects: 2 },
+  { id: "s2", name: "Ama Boateng", email: "ama@monnycreax.com",   role: "staff", title: "Copywriter",                 avatar: "AB", projects: 1 },
+];
+
+Object.assign(window, { MOCK_PROJECTS, MOCK_CLIENTS, MOCK_INVOICES, MOCK_CRM, MOCK_TICKETS, MOCK_TEAM });
+</script>
+<script type="text/babel" data-presets="react">
+/* Shared UI kit primitives — extracted from src/App.jsx */
+const { useState } = React;
+
+// ───── ICONS (lucide-style inline SVG, raw markup) ─────
+const ICON_PATHS = {
+  dashboard: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  folder: '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+  message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  card: '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+  bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/>',
+  check: '<circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  alert: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+  plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+  trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/>',
+  eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  more: '<circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>',
+  chevron: '<polyline points="9 18 15 12 9 6"/>',
+  chevronDown: '<polyline points="6 9 12 15 18 9"/>',
+  x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/>',
+  menu: '<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+  dollar: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  check2: '<polyline points="20 6 9 17 4 12"/>',
+};
+
+const Icon = ({ name, size = 17, color = "currentColor", fill = "none", strokeWidth = 2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }} dangerouslySetInnerHTML={{ __html: ICON_PATHS[name] || "" }} />
+);
+
+// ───── PRIMITIVES ─────
+const Avatar = ({ init, size = "md", scheme = "amber" }) => {
+  const sizes = { sm: 28, md: 36, lg: 48 };
+  const fonts = { sm: 11, md: 13, lg: 16 };
+  const schemes = {
+    amber:  { bg: "#FEF3C7", fg: "#92400E" },
+    purple: { bg: "#EDE9FE", fg: "#5B21B6" },
+    blue:   { bg: "#DBEAFE", fg: "#1E40AF" },
+    green:  { bg: "#D1FAE5", fg: "#065F46" },
+    red:    { bg: "#FEE2E2", fg: "#B91C1C" },
+  };
+  const c = schemes[scheme];
+  return (
+    <div style={{
+      width: sizes[size], height: sizes[size], borderRadius: 9999,
+      background: c.bg, color: c.fg,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: fonts[size],
+      flexShrink: 0,
+    }}>{init}</div>
+  );
+};
+
+const Badge = ({ tone = "gray", children }) => {
+  const tones = {
+    amber:   { bg: "#FEF3C7", fg: "#92400E" },
+    green:   { bg: "#D1FAE5", fg: "#065F46" },
+    red:     { bg: "#FEE2E2", fg: "#B91C1C" },
+    blue:    { bg: "#DBEAFE", fg: "#1E40AF" },
+    purple:  { bg: "#EDE9FE", fg: "#5B21B6" },
+    gray:    { bg: "#F3F4F6", fg: "#4B5563" },
+  };
+  const c = tones[tone] || tones.gray;
+  return <span style={{ background: c.bg, color: c.fg, padding: "3px 10px", borderRadius: 9999, fontSize: 11, fontWeight: 600, fontFamily: "DM Sans, sans-serif", whiteSpace: "nowrap" }}>{children}</span>;
+};
+
+const STATUS_TONES = {
+  active: "green", completed: "blue", pending: "amber", "at-risk": "red",
+  paid: "green", overdue: "red", open: "amber", resolved: "green",
+  "in-progress": "blue", high: "red", medium: "amber", low: "gray",
+  brief: "gray", deliverable: "blue", admin: "amber", staff: "blue", client: "green",
+  Lead: "gray", Qualified: "blue", "Proposal Sent": "purple", "Contract Signed": "amber",
+};
+const StatusBadge = ({ status, label }) => <Badge tone={STATUS_TONES[status] || "gray"}>{label || status}</Badge>;
+
+const Card = ({ children, style = {}, padding = 24, hover = false }) => (
+  <div style={{
+    background: "#fff",
+    border: "1px solid #F3F4F6",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+    borderRadius: 16,
+    padding,
+    ...style,
+  }}>{children}</div>
+);
+
+const Button = ({ variant = "primary", size = "md", onClick, children, icon }) => {
+  const variants = {
+    primary:   { bg: "#F59E0B", fg: "#030712", border: "none" },
+    secondary: { bg: "#F3F4F6", fg: "#4B5563", border: "none" },
+    ghost:     { bg: "#fff",    fg: "#374151", border: "1px solid #E5E7EB" },
+    dark:      { bg: "#030712", fg: "#fff",    border: "none" },
+    blue:      { bg: "#3B82F6", fg: "#fff",    border: "none" },
+  };
+  const sizes = { sm: { px: 12, py: 7, fs: 12 }, md: { px: 16, py: 10, fs: 13 } };
+  const v = variants[variant], s = sizes[size];
+  return (
+    <button onClick={onClick} style={{
+      background: v.bg, color: v.fg, border: v.border,
+      padding: `${s.py}px ${s.px}px`, borderRadius: 12,
+      fontFamily: "DM Sans, sans-serif", fontWeight: 700, fontSize: s.fs,
+      cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6,
+      transition: "all 200ms",
+    }}>
+      {icon && <Icon name={icon} size={13} color="currentColor" />}
+      {children}
+    </button>
+  );
+};
+
+const ProgressBar = ({ pct, color = "#F59E0B", height = 8 }) => (
+  <div style={{ height, background: "#F3F4F6", borderRadius: 9999, overflow: "hidden" }}>
+    <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: 9999, transition: "width 300ms" }} />
+  </div>
+);
+
+const MilestoneIcon = ({ status }) => {
+  if (status === "completed") return <svg width="17" height="17" viewBox="0 0 24 24" fill="#10B981" style={{flexShrink:0}}><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>;
+  if (status === "in-progress") return <Icon name="clock" size={17} color="#F59E0B" />;
+  return <div style={{ width: 17, height: 17, borderRadius: 9999, border: "2px solid #D1D5DB", boxSizing: "border-box", flexShrink: 0 }} />;
+};
+
+const Stat = ({ icon, label, value, change, tint = "amber" }) => {
+  const tints = {
+    amber:  { bg: "#FFFBEB", fg: "#D97706" },
+    blue:   { bg: "#EFF6FF", fg: "#2563EB" },
+    green:  { bg: "#ECFDF5", fg: "#059669" },
+    purple: { bg: "#F5F3FF", fg: "#7C3AED" },
+    red:    { bg: "#FEF2F2", fg: "#DC2626" },
+  };
+  const t = tints[tint];
+  return (
+    <Card padding={20}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: t.bg, color: t.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Icon name={icon} size={19} color={t.fg} />
+        </div>
+        {change !== undefined && (
+          <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "DM Sans", color: change >= 0 ? "#059669" : "#DC2626" }}>
+            {change >= 0 ? "+" : ""}{change}%
+          </span>
+        )}
+      </div>
+      <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: 24, letterSpacing: "-0.02em", color: "#111827" }}>{value}</div>
+      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "#6B7280", marginTop: 2 }}>{label}</div>
+    </Card>
+  );
+};
+
+// ───── LAYOUT ─────
+const NAV = {
+  client: [
+    ["dashboard", "Dashboard", "dashboard"],
+    ["projects", "My Projects", "briefcase"],
+    ["documents", "Documents", "folder"],
+    ["messages", "Messages", "message"],
+    ["invoices", "Invoices", "card"],
+    ["support", "Support", "help"],
+  ],
+  admin: [
+    ["dashboard", "Dashboard", "dashboard"],
+    ["clients", "Clients", "users"],
+    ["crm", "CRM Pipeline", "target"],
+    ["projects", "Projects", "briefcase"],
+    ["invoices", "Invoices", "file"],
+    ["reports", "Reports", "chart"],
+    ["team", "Team & Access", "shield"],
+    ["settings", "Settings", "settings"],
+  ],
+  staff: [
+    ["dashboard", "Dashboard", "dashboard"],
+    ["projects", "My Projects", "briefcase"],
+    ["tasks", "My Tasks", "check"],
+    ["messages", "Messages", "message"],
+    ["files", "Files", "folder"],
+  ],
+};
+
+const Sidebar = ({ role, page, setPage, profile }) => {
+  return (
+    <aside style={{
+      width: 220, background: "#030712", color: "#fff",
+      display: "flex", flexDirection: "column",
+      flexShrink: 0, height: "100vh", position: "sticky", top: 0,
+    }}>
+      <div style={{ padding: "20px 16px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+        <div style={{ width: 32, height: 32, background: "#F59E0B", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="15" height="15" viewBox="0 0 32 32"><polygon points="16,6 18.5,13 26,13 20,17.5 22.5,25 16,20.5 9.5,25 12,17.5 6,13 13.5,13" fill="#030712"/></svg>
+        </div>
+        <span style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: 17, letterSpacing: "-0.02em" }}>MonnyCreax</span>
+      </div>
+      <div style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", gap: 10 }}>
+        <Avatar init={profile.initials} size="sm" scheme={profile.scheme} />
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{profile.name}</div>
+          <div style={{ fontSize: 11, color: "#9CA3AF", textTransform: "capitalize" }}>{role}</div>
+        </div>
+      </div>
+      <nav style={{ flex: 1, padding: 8, overflowY: "auto" }}>
+        {NAV[role].map(([p, label, icon]) => {
+          const active = page === p;
+          return (
+            <button key={p} onClick={() => setPage(p)} style={{
+              width: "100%", display: "flex", alignItems: "center", gap: 12,
+              padding: "10px 12px", borderRadius: 12,
+              fontFamily: "DM Sans, sans-serif", fontSize: 13,
+              background: active ? "#F59E0B" : "transparent",
+              color: active ? "#030712" : "#9CA3AF",
+              fontWeight: active ? 700 : 500,
+              border: "none", cursor: "pointer", marginBottom: 2,
+              transition: "all 200ms",
+              textAlign: "left",
+            }}
+              onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#fff"; } }}
+              onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#9CA3AF"; } }}
+            >
+              <Icon name={icon} size={17} color="currentColor" />
+              <span>{label}</span>
+            </button>
+          );
+        })}
+      </nav>
+      <div style={{ padding: 8, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+        <button onClick={() => { try { window.top.location.href = "../../login.html"; } catch(e) { window.location.href = "../../login.html"; } }} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", borderRadius: 12, background: "transparent", color: "#6B7280", border: "none", cursor: "pointer", fontFamily: "DM Sans", fontSize: 13 }}>
+          <Icon name="logout" size={17} color="currentColor" />
+          <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+  );
+};
+
+const Header = ({ title, subtitle, profile }) => (
+  <header style={{ background: "#fff", borderBottom: "1px solid #F3F4F6", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 20 }}>
+    <div>
+      <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", color: "#111827", margin: 0, lineHeight: 1.2 }}>{title}</h1>
+      {subtitle && <div style={{ fontFamily: "DM Sans", fontSize: 13, color: "#6B7280", marginTop: 2 }}>{subtitle}</div>}
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <button style={{ width: 36, height: 36, background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative" }}>
+        <Icon name="bell" size={17} color="#6B7280" />
+        <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, background: "#EF4444", borderRadius: 9999, border: "2px solid #fff" }}></span>
+      </button>
+      <Avatar init={profile.initials} size="md" scheme={profile.scheme} />
+    </div>
+  </header>
+);
+
+const PortalShell = ({ role, profile, page, setPage, title, subtitle, children }) => (
+  <div style={{ display: "flex", height: "100vh", background: "#F9FAFB", overflow: "hidden", fontFamily: "DM Sans, sans-serif" }}>
+    <Sidebar role={role} page={page} setPage={setPage} profile={profile} />
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
+      <Header title={title} subtitle={subtitle} profile={profile} />
+      <main style={{ flex: 1, overflowY: "auto" }}>{children}</main>
+    </div>
+  </div>
+);
+
+// Export to window
+Object.assign(window, {
+  Icon, Avatar, Badge, StatusBadge, Card, Button, ProgressBar, MilestoneIcon, Stat,
+  Sidebar, Header, PortalShell, NAV,
+});
+
+
+// Client Portal screens
+const { useState: useStateC } = React;
+
+const ClientDashboard = ({ profile }) => {
+  const project = MOCK_PROJECTS[0];
+  return (
+    <div style={{ padding: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 16 }}>
+        <Stat icon="briefcase" label="Active Projects" value="1" tint="amber" />
+        <Stat icon="alert"     label="Pending Actions" value="2" tint="red" />
+        <Stat icon="message"   label="Unread Messages" value="3" tint="blue" />
+        <Stat icon="help"      label="Open Tickets"    value="1" tint="purple" />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16 }}>
+        <Card padding={24}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#92400E", marginBottom: 6 }}>Active Project</div>
+              <h2 style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 18, color: "#111827", margin: 0 }}>{project.title}</h2>
+              <div style={{ fontSize: 13, color: "#6B7280", marginTop: 2 }}>Due {project.dueDate}</div>
+            </div>
+            <StatusBadge status={project.status} label="Active" />
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "#374151" }}>Overall Progress</span>
+              <span style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 14, color: "#F59E0B" }}>{project.progress}%</span>
+            </div>
+            <ProgressBar pct={project.progress} />
+          </div>
+          <div style={{ borderTop: "1px solid #F3F4F6", paddingTop: 16 }}>
+            <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 14, color: "#111827", marginBottom: 12 }}>Milestones</div>
+            {project.milestones.map(m => (
+              <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #F9FAFB" }}>
+                <MilestoneIcon status={m.status} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: m.status === "completed" ? "#9CA3AF" : "#111827", textDecoration: m.status === "completed" ? "line-through" : "none" }}>{m.title}</div>
+                  <div style={{ fontSize: 11, color: "#9CA3AF" }}>{m.date}</div>
+                </div>
+                <StatusBadge status={m.status} label={m.status.replace("-", " ")} />
+              </div>
+            ))}
+          </div>
+        </Card>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <Card padding={20}>
+            <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 14, color: "#111827", marginBottom: 14 }}>Quick Actions</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {[["upload","Upload File"],["message","New Message"],["card","View Invoices"],["help","Get Support"]].map(([icon,label]) => (
+                <button key={label} style={{ background: "#F9FAFB", border: "1px solid #F3F4F6", borderRadius: 12, padding: "14px 10px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", fontFamily: "DM Sans", fontSize: 12, fontWeight: 600, color: "#374151" }}>
+                  <Icon name={icon} size={18} color="#F59E0B" />
+                  {label}
+                </button>
+              ))}
+            </div>
+          </Card>
+          <Card padding={20}>
+            <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 14, color: "#111827", marginBottom: 14 }}>Recent Activity</div>
+            {project.updates.map(u => (
+              <div key={u.id} style={{ display: "flex", gap: 10, padding: "8px 0", borderBottom: "1px solid #F9FAFB" }}>
+                <div style={{ width: 6, height: 6, borderRadius: 9999, background: "#F59E0B", marginTop: 6, flexShrink: 0 }}></div>
+                <div>
+                  <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.4 }}>{u.text}</div>
+                  <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{u.date}</div>
+                </div>
+              </div>
+            ))}
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ClientProjects = () => (
+  <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+    {MOCK_PROJECTS.map(p => (
+      <Card key={p.id} padding={20}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+          <div>
+            <h3 style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 16, color: "#111827", margin: 0 }}>{p.title}</h3>
+            <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{p.package} · Due {p.dueDate}</div>
+          </div>
+          <StatusBadge status={p.status} label="Active" />
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontSize: 12, color: "#6B7280" }}>{p.milestones.filter(m=>m.status==="completed").length}/{p.milestones.length} milestones</span>
+            <span style={{ fontSize: 12, fontWeight: 700, fontFamily: "Syne", color: "#F59E0B" }}>{p.progress}%</span>
+          </div>
+          <ProgressBar pct={p.progress} />
+        </div>
+      </Card>
+    ))}
+  </div>
+);
+
+const ClientMessages = () => {
+  const [messages, setMessages] = useStateC(MOCK_PROJECTS[0].messages);
+  const [text, setText] = useStateC("");
+  const send = () => {
+    if (!text.trim()) return;
+    setMessages([...messages, { id: "n"+Date.now(), sender: "Sarah Mitchell", role: "client", text, time: "Now" }]);
+    setText("");
+  };
+  return (
+    <div style={{ padding: 24, height: "calc(100% - 0px)", display: "flex", flexDirection: "column" }}>
+      <Card padding={0} style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid #F3F4F6" }}>
+          <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 15, color: "#111827" }}>{MOCK_PROJECTS[0].title}</div>
+          <div style={{ fontSize: 12, color: "#6B7280" }}>with Amara Osei</div>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+          {messages.map(m => {
+            const isClient = m.role === "client";
+            return (
+              <div key={m.id} style={{ display: "flex", justifyContent: isClient ? "flex-end" : "flex-start" }}>
+                <div style={{ maxWidth: "70%" }}>
+                  <div style={{ background: isClient ? "#F59E0B" : "#F3F4F6", color: isClient ? "#030712" : "#111827", padding: "10px 14px", borderRadius: 16, fontSize: 13, lineHeight: 1.45 }}>{m.text}</div>
+                  <div style={{ fontSize: 10, color: "#9CA3AF", marginTop: 4, textAlign: isClient ? "right" : "left" }}>{m.sender} · {m.time}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ padding: 16, borderTop: "1px solid #F3F4F6", display: "flex", gap: 8 }}>
+          <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === "Enter" && send()} placeholder="Type a message…" style={{ flex: 1, background: "#F3F4F6", border: "none", borderRadius: 12, padding: "10px 14px", fontSize: 13, fontFamily: "DM Sans", outline: "none" }} />
+          <Button variant="primary" onClick={send} icon="send">Send</Button>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+const ClientInvoices = () => {
+  const myInvoices = MOCK_INVOICES.filter(i => i.clientId === "c1" || i.clientId === "c2");
+  return (
+    <div style={{ padding: 24 }}>
+      <Card padding={0}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, fontFamily: "DM Sans" }}>
+          <thead>
+            <tr style={{ background: "#F9FAFB" }}>
+              {["Project","Issued","Due","Amount","Status",""].map(h => <th key={h} style={{ padding: "12px 20px", textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 700, color: "#6B7280" }}>{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {myInvoices.map(i => (
+              <tr key={i.id} style={{ borderTop: "1px solid #F3F4F6" }}>
+                <td style={{ padding: "14px 20px", fontWeight: 600 }}>{i.project}</td>
+                <td style={{ padding: "14px 20px", color: "#6B7280" }}>{i.issued}</td>
+                <td style={{ padding: "14px 20px", color: "#6B7280" }}>{i.due}</td>
+                <td style={{ padding: "14px 20px", fontFamily: "Syne", fontWeight: 800, color: "#111827" }}>${i.amount.toLocaleString()}</td>
+                <td style={{ padding: "14px 20px" }}><StatusBadge status={i.status} label={i.status} /></td>
+                <td style={{ padding: "14px 20px", textAlign: "right" }}>
+                  {i.status === "pending" && <Button size="sm" variant="primary">Pay Now</Button>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+    </div>
+  );
+};
+
+const ClientSupport = () => (
+  <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+    <Button variant="primary" icon="plus">New Ticket</Button>
+    {MOCK_TICKETS.filter(t => t.clientId === "c1").map(t => (
+      <Card key={t.id} padding={20}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <div style={{ width: 8, height: 8, borderRadius: 9999, background: t.status === "open" ? "#F59E0B" : "#10B981", marginTop: 7 }}></div>
+            <div>
+              <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 14 }}>{t.subject}</div>
+              <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>Opened {t.created}</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            <StatusBadge status={t.priority} label={t.priority} />
+            <StatusBadge status={t.status} label={t.status} />
+          </div>
+        </div>
+      </Card>
+    ))}
+  </div>
+);
+
+const ClientPlaceholder = ({ label }) => (
+  <div style={{ padding: 24 }}>
+    <Card padding={48}>
+      <div style={{ textAlign: "center", color: "#6B7280" }}>
+        <Icon name="folder" size={32} color="#D1D5DB" />
+        <div style={{ fontFamily: "Syne", fontWeight: 800, fontSize: 16, color: "#111827", marginTop: 12 }}>{label}</div>
+        <div style={{ fontSize: 13, marginTop: 4 }}>Files and documents appear here.</div>
+      </div>
+    </Card>
+  </div>
+);
+
+const ClientApp = () => {
+  const [page, setPage] = useStateC("dashboard");
+  const profile = { name: "Sarah Mitchell", initials: "SM", scheme: "amber" };
+  const titles = {
+    dashboard: ["Dashboard", "Welcome back, Sarah"],
+    projects:  ["My Projects", "Track every project in flight"],
+    documents: ["Documents", "All your project files"],
+    messages:  ["Messages", "Talk to your strategy team"],
+    invoices:  ["Invoices", "Pay and track your billing"],
+    support:   ["Support", "We're here to help"],
+  };
+  const [title, subtitle] = titles[page];
+  const screens = {
+    dashboard: <ClientDashboard profile={profile} />,
+    projects:  <ClientProjects />,
+    documents: <ClientPlaceholder label="Documents" />,
+    messages:  <ClientMessages />,
+    invoices:  <ClientInvoices />,
+    support:   <ClientSupport />,
+  };
+  return <PortalShell role="client" profile={profile} page={page} setPage={setPage} title={title} subtitle={subtitle}>{screens[page]}</PortalShell>;
+};
+
+window.ClientApp = ClientApp;
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(<ClientApp />);
+</script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Admin" name="Admin Suite — UI Kit" subtitle="Pure HTML — Dashboard, Clients, CRM, Invoices" viewport="1280x820" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MonnyCreax · Admin Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/kit.css">
+<style>
+  /* page-specific tweaks */
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+  .chart-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .legend { display: flex; gap: 14px; font-size: 11px; font-weight: 600; color: #6B7280; }
+  .legend span.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .crm-summary { display: flex; gap: 32px; }
+  .crm-summary > div .lab { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6B7280; }
+  .crm-summary > div .val { font-family: "Syne", sans-serif; font-weight: 800; font-size: 22px; color: #111827; }
+  .crm-summary > div .val.amber { color: #F59E0B; }
+  .deal-name { font-family: "Syne", sans-serif; font-weight: 800; font-size: 13px; color: #111827; margin-bottom: 2px; }
+  .deal-contact { font-size: 11px; color: #6B7280; margin-bottom: 10px; }
+  .deal-value { font-family: "Syne", sans-serif; font-weight: 800; font-size: 16px; color: #F59E0B; margin-bottom: 8px; }
+  .deal-meta { display: flex; justify-content: space-between; font-size: 11px; color: #6B7280; margin-bottom: 6px; }
+  .deal-owner { margin-top: 10px; font-size: 11px; color: #6B7280; }
+
+  .alert-grid { display: grid; gap: 8px; }
+
+  /* SVG sidebar icon — small helper */
+  .ic { width: 17px; height: 17px; flex-shrink: 0; }
+  .ic-sm { width: 13px; height: 13px; }
+  .ic-md { width: 19px; height: 19px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-mark">
+        <svg width="15" height="15" viewBox="0 0 32 32"><polygon points="16,6 18.5,13 26,13 20,17.5 22.5,25 16,20.5 9.5,25 12,17.5 6,13 13.5,13" fill="#030712"></polygon></svg>
+      </div>
+      <span class="sidebar-name">MonnyCreax</span>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar sm purple">AO</div>
+      <div>
+        <div class="sidebar-user-name">Amara Osei</div>
+        <div class="sidebar-user-role">admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="clients">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Clients</span>
+      </button>
+      <button class="nav-item" data-page="crm">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        <span>CRM Pipeline</span>
+      </button>
+      <button class="nav-item" data-page="projects">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        <span>Projects</span>
+      </button>
+      <button class="nav-item" data-page="invoices">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span>Invoices</span>
+      </button>
+      <button class="nav-item" data-page="reports">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        <span>Reports</span>
+      </button>
+      <button class="nav-item" data-page="team">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span>Team &amp; Access</span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+    <div class="sidebar-foot">
+      <button class="nav-item" onclick="try { window.top.location.href='../../login.html'; } catch(e) { window.location.href='../../login.html'; }">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <span>Log Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+    <header class="header">
+      <div>
+        <h1 class="header-title" id="pageTitle">Dashboard</h1>
+        <div class="header-sub" id="pageSub">MonnyCreax operations at a glance</div>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="avatar md purple">AO</div>
+      </div>
+    </header>
+    <main class="content">
+
+      <!-- ════════════════ DASHBOARD ════════════════ -->
+      <section class="page active" data-page="dashboard">
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile amber">
+                <svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              </div>
+              <span class="stat-change up">+12%</span>
+            </div>
+            <div class="stat-value">2</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile green">
+                <svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <span class="stat-change up">+8%</span>
+            </div>
+            <div class="stat-value">$2,450</div>
+            <div class="stat-label">Revenue (Month)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile purple">
+                <svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <span class="stat-change down">-5%</span>
+            </div>
+            <div class="stat-value">$500</div>
+            <div class="stat-label">Pending Invoices</div>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile red">
+                <svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+              <span class="stat-change up">+20%</span>
+            </div>
+            <div class="stat-value">2</div>
+            <div class="stat-label">Open Tickets</div>
+          </div>
+        </div>
+
+        <div class="chart-row">
+          <div class="card card-lg">
+            <div class="flex-between mb-4">
+              <div>
+                <div class="card-title" style="margin-bottom:2px">Revenue vs Invoiced</div>
+                <div class="text-tiny text-muted">Last 6 months</div>
+              </div>
+              <div class="legend">
+                <span><span class="sw" style="background:#F59E0B"></span>Collected</span>
+                <span><span class="sw" style="background:#8B5CF6"></span>Invoiced</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 600 180" style="width:100%;height:auto">
+              <defs>
+                <linearGradient id="amberFill" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.3"></stop>
+                  <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <!-- collected area -->
+              <path d="M 24 88 L 139.2 67.5 L 254.4 22.5 L 369.6 73.125 L 484.8 33.75 L 600 19.6875 L 576 156 L 24 156 Z" fill="url(#amberFill)"></path>
+              <!-- invoiced dashed -->
+              <path d="M 24 67.5 L 139.2 39 L 254.4 22.5 L 369.6 50.625 L 484.8 22.5 L 576 -3.375" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="5 4"></path>
+              <!-- collected solid -->
+              <path d="M 24 88 L 139.2 67.5 L 254.4 22.5 L 369.6 73.125 L 484.8 33.75 L 576 19.6875" fill="none" stroke="#F59E0B" stroke-width="2.5"></path>
+              <!-- points + month labels -->
+              <g font-family="DM Sans" font-size="11" fill="#9CA3AF">
+                <circle cx="24"   cy="88"      r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="24"   y="176" text-anchor="middle">Nov</text>
+                <circle cx="139"  cy="67.5"    r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="139"  y="176" text-anchor="middle">Dec</text>
+                <circle cx="254"  cy="22.5"    r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="254"  y="176" text-anchor="middle">Jan</text>
+                <circle cx="370"  cy="73.125"  r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="370"  y="176" text-anchor="middle">Feb</text>
+                <circle cx="485"  cy="33.75"   r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="485"  y="176" text-anchor="middle">Mar</text>
+                <circle cx="576"  cy="19.6875" r="3.5" fill="#fff" stroke="#F59E0B" stroke-width="2"></circle><text x="576"  y="176" text-anchor="middle">Apr</text>
+              </g>
+            </svg>
+          </div>
+          <div class="card card-lg">
+            <div class="card-title" style="margin-bottom:2px">Package Mix</div>
+            <div class="text-tiny text-muted mb-4">Active projects by tier</div>
+            <div style="display:flex;align-items:center;gap:20px">
+              <svg viewBox="0 0 140 140" width="120" height="120">
+                <g transform="translate(70 70) rotate(-90)">
+                  <!-- 1 of 4 = 25% -> length 78.54 of 314.16 -->
+                  <circle r="50" fill="none" stroke="#FBBF24" stroke-width="20" stroke-dasharray="78.54 314.16" stroke-dashoffset="0"></circle>
+                  <!-- 2 of 4 = 50% -> length 157.08, offset -78.54 -->
+                  <circle r="50" fill="none" stroke="#F59E0B" stroke-width="20" stroke-dasharray="157.08 314.16" stroke-dashoffset="-78.54"></circle>
+                  <!-- 1 of 4 = 25% -> length 78.54, offset -235.62 -->
+                  <circle r="50" fill="none" stroke="#8B5CF6" stroke-width="20" stroke-dasharray="78.54 314.16" stroke-dashoffset="-235.62"></circle>
+                </g>
+                <text x="70" y="70" text-anchor="middle" font-family="Syne" font-weight="800" font-size="22" fill="#111827">4</text>
+                <text x="70" y="86" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#6B7280">projects</text>
+              </svg>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px"><span style="width:10px;height:10px;background:#FBBF24;border-radius:2px"></span><span style="flex:1;color:#374151">Rapid</span><span class="font-syne">1</span></div>
+                <div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px"><span style="width:10px;height:10px;background:#F59E0B;border-radius:2px"></span><span style="flex:1;color:#374151">Complete</span><span class="font-syne">2</span></div>
+                <div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px"><span style="width:10px;height:10px;background:#8B5CF6;border-radius:2px"></span><span style="flex:1;color:#374151">Premium</span><span class="font-syne">1</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="card card-lg">
+            <div class="card-title">Alerts</div>
+            <div class="alert-grid">
+              <div class="alert red">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Tetteh Ventures invoice overdue 14 days</span>
+              </div>
+              <div class="alert amber">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>TechVision Co milestone due in 2 days</span>
+              </div>
+              <div class="alert amber">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span>3 unread support tickets</span>
+              </div>
+              <div class="alert red">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Marcus Tetteh marked at-risk — last contact 21d</span>
+              </div>
+            </div>
+          </div>
+          <div class="card card-lg">
+            <div class="card-title">Team Workload</div>
+            <div class="workload-row">
+              <div class="avatar md amber">AO</div>
+              <div style="flex:1;min-width:0">
+                <div class="flex-between mb-3" style="margin-bottom:6px"><span style="font-size:13px;font-weight:600">Amara Osei</span><span class="text-tiny text-muted">3 projects</span></div>
+                <div class="progress thin"><div class="progress-fill" style="width:100%"></div></div>
+              </div>
+            </div>
+            <div class="workload-row">
+              <div class="avatar md blue">KA</div>
+              <div style="flex:1;min-width:0">
+                <div class="flex-between" style="margin-bottom:6px"><span style="font-size:13px;font-weight:600">Kwame Addo</span><span class="text-tiny text-muted">2 projects</span></div>
+                <div class="progress thin"><div class="progress-fill" style="width:67%;background:#3B82F6"></div></div>
+              </div>
+            </div>
+            <div class="workload-row">
+              <div class="avatar md green">AB</div>
+              <div style="flex:1;min-width:0">
+                <div class="flex-between" style="margin-bottom:6px"><span style="font-size:13px;font-weight:600">Ama Boateng</span><span class="text-tiny text-muted">1 project</span></div>
+                <div class="progress thin"><div class="progress-fill" style="width:33%;background:#10B981"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ CLIENTS ════════════════ -->
+      <section class="page" data-page="clients">
+        <div class="flex gap-3 mb-4" style="justify-content:space-between">
+          <div class="search-wrap">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input class="input input-search" placeholder="Search clients…" />
+          </div>
+          <button class="btn primary"><svg class="ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add Client</button>
+        </div>
+        <div class="card card-flush">
+          <table class="tbl">
+            <thead><tr><th>Client</th><th>Package</th><th>Status</th><th>LTV</th><th>Location</th><th></th></tr></thead>
+            <tbody>
+              <tr class="row-hover">
+                <td><div class="flex gap-3" style="align-items:center"><div class="avatar sm amber">SM</div><div><div class="font-bold">Sarah Mitchell</div><div class="text-tiny text-muted">TechVision Co</div></div></div></td>
+                <td style="color:#374151">Complete Clarity</td>
+                <td><span class="badge green">active</span></td>
+                <td class="num">$750</td>
+                <td class="text-muted">Lagos, Nigeria</td>
+                <td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></td>
+              </tr>
+              <tr class="row-hover">
+                <td><div class="flex gap-3" style="align-items:center"><div class="avatar sm blue">DO</div><div><div class="font-bold">David Okafor</div><div class="text-tiny text-muted">Apex Speakers</div></div></div></td>
+                <td style="color:#374151">Rapid Clarity</td>
+                <td><span class="badge green">active</span></td>
+                <td class="num">$500</td>
+                <td class="text-muted">Accra, Ghana</td>
+                <td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></td>
+              </tr>
+              <tr class="row-hover">
+                <td><div class="flex gap-3" style="align-items:center"><div class="avatar sm green">ZN</div><div><div class="font-bold">Zanele Nkosi</div><div class="text-tiny text-muted">Nkosi Leadership</div></div></div></td>
+                <td style="color:#374151">Premium Clarity</td>
+                <td><span class="badge blue">completed</span></td>
+                <td class="num">$1,200</td>
+                <td class="text-muted">Johannesburg, SA</td>
+                <td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></td>
+              </tr>
+              <tr class="row-hover">
+                <td><div class="flex gap-3" style="align-items:center"><div class="avatar sm red">MT</div><div><div class="font-bold">Marcus Tetteh</div><div class="text-tiny text-muted">Tetteh Ventures</div></div></div></td>
+                <td style="color:#374151">Complete Clarity</td>
+                <td><span class="badge red">at-risk</span></td>
+                <td class="num">$750</td>
+                <td class="text-muted">London, UK</td>
+                <td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════════════════ CRM ════════════════ -->
+      <section class="page" data-page="crm">
+        <div class="card mb-4" style="padding:20px">
+          <div class="crm-summary">
+            <div><div class="lab">Pipeline Total</div><div class="val">$4,400</div></div>
+            <div><div class="lab">Weighted Forecast</div><div class="val amber">$2,415</div></div>
+            <div><div class="lab">Deals</div><div class="val">5</div></div>
+          </div>
+        </div>
+        <div class="kanban">
+          <!-- Lead -->
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div>
+                <div class="font-syne" style="font-size:13px">Lead</div>
+                <div class="text-tiny text-muted">1 deal · $1,200</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="deal-name">FutureEdge Inc</div>
+              <div class="deal-contact">Priya Sharma</div>
+              <div class="deal-value">$1,200</div>
+              <div class="deal-meta"><span>20% likely</span><span>2026-06-01</span></div>
+              <div class="progress" style="height:4px"><div class="progress-fill" style="width:20%"></div></div>
+              <div class="deal-owner">Amara Osei</div>
+            </div>
+            <button class="kanban-add">+ Add Deal</button>
+          </div>
+          <!-- Qualified -->
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div>
+                <div class="font-syne" style="font-size:13px">Qualified</div>
+                <div class="text-tiny text-muted">2 deals · $1,500</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="deal-name">Beacon Advisory</div>
+              <div class="deal-contact">Jomo Mwangi</div>
+              <div class="deal-value">$750</div>
+              <div class="deal-meta"><span>40% likely</span><span>2026-05-20</span></div>
+              <div class="progress" style="height:4px"><div class="progress-fill" style="width:40%"></div></div>
+              <div class="deal-owner">Kwame Addo</div>
+            </div>
+            <div class="kanban-card">
+              <div class="deal-name">Nexus Media</div>
+              <div class="deal-contact">Chioma Obi</div>
+              <div class="deal-value">$750</div>
+              <div class="deal-meta"><span>35% likely</span><span>2026-06-15</span></div>
+              <div class="progress" style="height:4px"><div class="progress-fill" style="width:35%"></div></div>
+              <div class="deal-owner">Kwame Addo</div>
+            </div>
+            <button class="kanban-add">+ Add Deal</button>
+          </div>
+          <!-- Proposal -->
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div>
+                <div class="font-syne" style="font-size:13px">Proposal Sent</div>
+                <div class="text-tiny text-muted">1 deal · $500</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="deal-name">Orbit Creatives</div>
+              <div class="deal-contact">Fatima Al-Rashid</div>
+              <div class="deal-value">$500</div>
+              <div class="deal-meta"><span>60% likely</span><span>2026-05-10</span></div>
+              <div class="progress" style="height:4px"><div class="progress-fill" style="width:60%"></div></div>
+              <div class="deal-owner">Amara Osei</div>
+            </div>
+            <button class="kanban-add">+ Add Deal</button>
+          </div>
+          <!-- Contract -->
+          <div class="kanban-col">
+            <div class="kanban-col-head">
+              <div>
+                <div class="font-syne" style="font-size:13px">Contract Signed</div>
+                <div class="text-tiny text-muted">1 deal · $1,200</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="deal-name">Summit Leaders</div>
+              <div class="deal-contact">Bernard Asante</div>
+              <div class="deal-value">$1,200</div>
+              <div class="deal-meta"><span>90% likely</span><span>2026-05-05</span></div>
+              <div class="progress" style="height:4px"><div class="progress-fill" style="width:90%"></div></div>
+              <div class="deal-owner">Amara Osei</div>
+            </div>
+            <button class="kanban-add">+ Add Deal</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ INVOICES ════════════════ -->
+      <section class="page" data-page="invoices">
+        <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile amber"><svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+            </div>
+            <div class="stat-value">$3,200</div>
+            <div class="stat-label">Total Invoiced</div>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile purple"><svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+            </div>
+            <div class="stat-value">$500</div>
+            <div class="stat-label">Pending</div>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              <div class="stat-tile red"><svg class="ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+            </div>
+            <div class="stat-value">$750</div>
+            <div class="stat-label">Overdue</div>
+          </div>
+        </div>
+        <div class="card card-flush">
+          <div class="flex-between" style="padding:16px 20px;border-bottom:1px solid #F3F4F6">
+            <div class="font-syne" style="font-size:15px">All Invoices</div>
+            <button class="btn primary"><svg class="ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Create Invoice</button>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Client</th><th>Project</th><th>Issued</th><th>Due</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="font-bold">TechVision Co</td><td class="text-muted">Complete Clarity Package</td><td class="text-muted">2026-03-15</td><td class="text-muted">2026-03-29</td><td class="num">$750</td><td><span class="badge green">paid</span></td><td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></td></tr>
+              <tr><td class="font-bold">Apex Speakers</td><td class="text-muted">Rapid Clarity Package</td><td class="text-muted">2026-04-10</td><td class="text-muted">2026-04-24</td><td class="num">$500</td><td><span class="badge amber">pending</span></td><td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></td></tr>
+              <tr><td class="font-bold">Nkosi Leadership</td><td class="text-muted">Premium Clarity + Support</td><td class="text-muted">2026-01-10</td><td class="text-muted">2026-01-24</td><td class="num">$1,200</td><td><span class="badge green">paid</span></td><td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></td></tr>
+              <tr><td class="font-bold">Tetteh Ventures</td><td class="text-muted">Complete Clarity Package</td><td class="text-muted">2026-02-20</td><td class="text-muted">2026-03-06</td><td class="num">$750</td><td><span class="badge red">overdue</span></td><td style="text-align:right;color:#9CA3AF"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════════════════ PLACEHOLDERS ════════════════ -->
+      <section class="page" data-page="projects">
+        <div class="card" style="padding:48px;text-align:center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <div class="font-syne" style="font-size:16px;margin-top:12px">Projects table</div>
+          <div class="text-tiny text-muted" style="margin-top:4px;font-size:13px">Filterable list of every project across the agency.</div>
+        </div>
+      </section>
+      <section class="page" data-page="reports">
+        <div class="card" style="padding:48px;text-align:center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <div class="font-syne" style="font-size:16px;margin-top:12px">Reports &amp; analytics</div>
+          <div class="text-tiny text-muted" style="margin-top:4px;font-size:13px">KPI cards, revenue charts, client health table.</div>
+        </div>
+      </section>
+      <section class="page" data-page="team">
+        <div class="card" style="padding:48px;text-align:center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <div class="font-syne" style="font-size:16px;margin-top:12px">Team &amp; Access</div>
+          <div class="text-tiny text-muted" style="margin-top:4px;font-size:13px">Member list and permission matrix.</div>
+        </div>
+      </section>
+      <section class="page" data-page="settings">
+        <div class="card" style="padding:48px;text-align:center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block"><circle cx="12" cy="12" r="3"></circle></svg>
+          <div class="font-syne" style="font-size:16px;margin-top:12px">Settings</div>
+          <div class="text-tiny text-muted" style="margin-top:4px;font-size:13px">Business profile and integrations.</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  var TITLES = {
+    dashboard: ["Dashboard", "MonnyCreax operations at a glance"],
+    clients:   ["Clients", "Directory of every active and past client"],
+    crm:       ["CRM Pipeline", "Track every deal from lead to signed"],
+    projects:  ["Projects", "All projects across every client"],
+    invoices:  ["Invoices", "Billing across the business"],
+    reports:   ["Reports", "Health, revenue, and delivery metrics"],
+    team:      ["Team & Access", "Members and permissions"],
+    settings:  ["Settings", "Business configuration and integrations"]
+  };
+  document.querySelectorAll(".nav-item[data-page]").forEach(function(b) {
+    b.addEventListener("click", function() {
+      var p = b.dataset.page;
+      document.querySelectorAll(".nav-item").forEach(function(x) { x.classList.toggle("active", x === b); });
+      document.querySelectorAll(".page").forEach(function(x) { x.classList.toggle("active", x.dataset.page === p); });
+      var t = TITLES[p];
+      if (t) {
+        document.getElementById("pageTitle").textContent = t[0];
+        document.getElementById("pageSub").textContent = t[1];
+      }
+    });
+  });
+</script>
+</body>
+</html>
