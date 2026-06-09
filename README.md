@@ -1,6 +1,6 @@
 # MonnyCreax Design System
 
-Boutique brand-strategy consultancy. This system powers the **MonnyCreax Client Portal** — a single, role-aware platform for client delivery, team communication, file management, invoicing, and business oversight. It replaces scattered email/WhatsApp threads with one controlled hub.
+Bethwel Monny Service management system. This system powers the **MonnyCreax Client Portal** — a single, role-aware platform for client delivery, team communication, file management, invoicing, and business oversight. It replaces scattered email/WhatsApp threads with one controlled hub.
 
 > **Strategy before design. Clarity in delivery.**
 
